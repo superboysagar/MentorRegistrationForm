@@ -24,21 +24,45 @@
 
     <p id="response"></p>
 
+    <div class="popup" id="popup">
+        User registered successfully!
+    </div>
+    <div class="overlay" id="overlay"></div>
+
     <script>
         async function registerUser() {
             const name = document.getElementById("name").value;
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
+            const popup = document.getElementById("popup");
+            const overlay = document.getElementById("overlay");
 
-            const response = await fetch("http://127.0.0.1:5000/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ name, email, password })
-            });
+            try {
+                const response = await fetch("http://127.0.0.1:5000/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ name, email, password })
+                });
 
-            const result = await response.json();
+                const result = await response.json();
+                if (response.ok) {
+                    popup.textContent = result.message || "User registered successfully!";
+                    popup.classList.add("active");
+                    overlay.classList.add("active");
+
+                    setTimeout(() => {
+                        popup.classList.remove("active");
+                        overlay.classList.remove("active");
+                    }, 3000);
+                    document.getElementById("registrationForm").reset();
+                } else {
+                    alert(result.error || "Failed to register user.");
+                }
+            } catch (error) {
+                alert("An error occurred. Please try again.");
+            }
             document.getElementById("response").innerText = result.message || result.error;
         }
     </script>
