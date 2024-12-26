@@ -38,6 +38,43 @@ def register():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+# Endpoint to view all users
+@app.route('/users', methods=['GET'])
+def get_users():
+    try:
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor(dictionary=True)
+        cursor.execute("SELECT * FROM users")
+        users = cursor.fetchall()
+        cursor.close()
+        connection.close()
+
+        return jsonify(users), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# Endpoint to delete a user by ID
+@app.route('/delete/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    try:
+        connection = mysql.connector.connect(**db_config)
+        cursor = connection.cursor()
+        cursor.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        connection.commit()
+        rows_affected = cursor.rowcount
+        cursor.close()
+        connection.close()
+
+        if rows_affected == 0:
+            return jsonify({"message": "User not found"}), 404
+
+        return jsonify({"message": "User deleted successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

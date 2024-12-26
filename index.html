@@ -20,7 +20,12 @@
         <input class="pass1" type="password" id="password" name="password" required><br><br>
         
         <button class="submit-button" type="button" onclick="registerUser()">Register</button>
+        <br><br><br>
+        <h2 class="ViewUser">User Management</h2>
+        <button class="view-button" type="button" onclick="fetchUsers()">View Users</button>
+        <div id="userList"></div>
     </form>
+    
 
     <p id="response"></p>
 
@@ -64,6 +69,44 @@
                 alert("An error occurred. Please try again.");
             }
             document.getElementById("response").innerText = result.message || result.error;
+        }
+        async function fetchUsers() {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/users");
+                const users = await response.json();
+
+                if (response.ok) {
+                    const userList = document.getElementById("userList");
+                    userList.innerHTML = "<ul>" + users.map(user => `
+                        <li>
+                            ${user.name} (${user.email}) 
+                            <button onclick="deleteUser(${user.id})">Delete</button>
+                        </li>
+                    `).join('') + "</ul>";
+                } else {
+                    alert(users.error || "Failed to fetch users.");
+                }
+            } catch (error) {
+                alert("An error occurred while fetching users.");
+            }
+        }
+
+        async function deleteUser(userId) {
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/delete/${userId}`, {
+                    method: "DELETE"
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message || "User deleted successfully!");
+                    fetchUsers();
+                } else {
+                    alert(result.error || "Failed to delete user.");
+                }
+            } catch (error) {
+                alert("An error occurred while deleting the user.");
+            }
         }
     </script>
 </body>

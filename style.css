@@ -110,13 +110,17 @@
     .pass1{
         border-radius: 5px;
     }
+    .ViewUser{
+        margin-bottom: 5px;
+    }
     h2{
         align-items: center;
         margin-bottom: 20px;
+        margin-top: 5px;
     }
     form{
         background-color: #99b3f8;
-        height: 300px;
+        height: 500px;
         width: 350px;
         align-content: center;
         align-items: center;
@@ -154,3 +158,44 @@
     .overlay.active {
         display: block;
     }
+    .view-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    .view-button:hover {
+        background-color: #3e8e41;
+    }
+    #userList {
+        margin-top: 20px;
+        width: 350px;
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    #userList ul {
+        list-style-type: none;
+    }
+    #userList li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    #userList button {
+        padding: 5px 10px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+    #userList button:hover {
+        background-color: #d32f2f;
+    }
+    
